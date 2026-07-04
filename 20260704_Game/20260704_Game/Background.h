@@ -1,7 +1,9 @@
 #pragma once
-class Backgraund
+
+class Background
 {
 private:
+
 	int imageHandle;
 public:
 
@@ -10,4 +12,3 @@ public:
 	void Draw(float cameraX);
 
 };
-
