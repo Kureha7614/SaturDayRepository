@@ -1,57 +1,115 @@
-#include "Game.h"
-#include "DxLib.h"
+#include"Game.h"
+#include"Config.h"
+#include"DxLib.h"
 
-//=====================================================
-// åˆæœŸåŒ–
-//=====================================================
 void Game::Init()
 {
-	//-----------------------------------------
-	// èƒŒæ™¯åˆæœŸåŒ–
-	//-----------------------------------------
-	background.Init();
-	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®
-	objects.emplace_back(100, 300);
-	objects.emplace_back(500, 300);
-	objects.emplace_back(1000, 300);
-	objects.emplace_back(1500, 300);
+	//======================================
+	//•ªŠ„‰æ‘œ‚Ì“Ç‚İ‚İ
+	//======================================
+	LoadDivGraph("Image/AnimationPlayer1.png",
+		Config::PLAYER_TOTAL_FRAMES,
+		Config::PLAYER_COL,
+		Config::PLAYER_ROW,
+		Config::PLAYER_WIDTH,
+		Config::PLAYER_HEIGHT,
+		images);
+	//======================================
+	//ƒAƒjƒ[ƒVƒ‡ƒ“‚É•ªŠ„‰æ‘œ‚ğİ’è
+	//======================================
+	animations.SetImages(images);
+
+	currentAnim = AnimationType::idel;
+	PlayerAnimation(currentAnim);
+	oldSpace = false;
 }
 
-//=====================================================
-// æ›´æ–°
-//=====================================================
 void Game::Update()
 {
-	//-----------------------------------------
-	// ã‚«ãƒ¡ãƒ©æ›´æ–°
-	//-----------------------------------------
-	camera.Update();
+	//======================================
+	//ƒtƒŒ[ƒ€ƒ}ƒl[ƒWƒƒ[XV
+	//======================================
+	frameManager.Update();
+
+	//======================================
+	//ƒXƒy[ƒXƒL[‚Ì‰Ÿ‚µ‚½”»’è
+	//======================================
+	bool nowSpase = (CheckHitKey(KEY_INPUT_SPACE));
+
+	//======================================
+	//ƒXƒy[ƒXƒL[‚ª‰Ÿ‚³‚ê‚½uŠÔ‚ÉƒAƒjƒ[ƒVƒ‡ƒ“‚ğØ‚è‘Ö‚¦‚é
+	//======================================
+	if (nowSpase && !oldSpace)
+	{
+		switch (currentAnim)
+		{
+		case AnimationType::idel:
+			currentAnim = AnimationType::walk;
+			break;
+		case AnimationType::walk:
+			currentAnim = AnimationType::run;
+			break;
+		case AnimationType::run:
+			currentAnim = AnimationType::jump;
+			break;
+		case AnimationType::jump:
+			currentAnim = AnimationType::idel;
+			break;
+		default:
+			break;
+		}
+		//======================================
+		//ƒAƒjƒ[ƒVƒ‡ƒ“Ø‚è‘Ö‚¦
+		//======================================
+		PlayerAnimation(currentAnim);
+	}
+	//======================================
+	//‘O‰ñ‚ÌƒXƒy[ƒXƒL[‚Ìó‘ÔXV
+	//======================================	
+	oldSpace = nowSpase;
 }
 
-//=====================================================
-// æç”»
-//=====================================================
 void Game::Draw()
 {
-	//-----------------------------------------
-	// èƒŒæ™¯æç”»
-	//-----------------------------------------
-	background.Draw(camera.GetX());
 
-	//-----------------------------------------
-	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
-	//-----------------------------------------
-	for (auto& obj : objects)
+
+	DrawGraph(Config::PLAYER_DRAW_X,
+		Config::PLAYER_DRAW_Y,
+		animations.GetImage(frameManager.GetFrameCounter()),
+		TRUE);
+
+	DrawFormatString(
+		20,
+		20,
+		GetColor(255, 255, 255),
+		"Frame : %d",
+		frameManager.GetFrameCounter());
+}
+
+void Game::PlayerAnimation(AnimationType type)
+{
+	int row = static_cast<int>(type);
+
+	int startFrame = row * Config::PLAYER_COL;
+
+	int speed = Config::IDLE_SPPED;
+
+	switch (type)
 	{
-		obj.Draw(camera.GetX());
+	case AnimationType::idel:
+		speed = Config::IDLE_SPPED;
+		break;
+		case AnimationType::walk:
+		speed = Config::WALK_SPPED;
+		break;
+	case AnimationType::run:
+		speed = Config::RUN_SPPED;
+		break;
+	case AnimationType::jump:
+		speed = Config::JUMP_SPPED;
+		break;
 	}
 
-	//-----------------------------------------
-	// ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º
-	//-----------------------------------------
-	DrawFormatString(20, 20, GetColor(255, 255, 0), "CameraX : %.0f", camera.GetX());
-
-	DrawString(20, 50, "A : Left", GetColor(255, 255, 255));
-
-	DrawString(20, 70, "D : Right", GetColor(255, 255, 255));
+	animations.Play(startFrame, Config::PLAYER_COL,
+		speed);
 }

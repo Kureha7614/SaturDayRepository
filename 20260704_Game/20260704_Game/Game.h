@@ -1,26 +1,43 @@
 #pragma once
 
-#include <vector>
-
-#include "Camera.h"
-#include "Background.h"
-#include "Map.h"
-
+#include"Config.h"
+#include"Animation2.h"
+#include"AnimationType.h"
+#include"FrameManager.h"
 class Game
 {
 private:
+	//==========================================
+	//フレームマネージャー
+	//==========================================
+	FrameManager frameManager;
+	//==========================================
+	//アニメーション
+	//==========================================
+	Animation animations;
+	//==========================================
+	//分割画像
+	//==========================================
+	int images[Config::PLAYER_TOTAL_FRAMES];
+	//==========================================
+	//現在のアニメーション
+	//==========================================
+	AnimationType currentAnim;
+	//==========================================
+	//前回のスペースキーの状態
+	//==========================================
+	bool oldSpace;
+	//==========================================
+	//アニメーション切り替え
+	//==========================================
+	void PlayerAnimation(AnimationType type);
 
-	Camera camera;
-
-	Background background;
-
-	std::vector<Map> objects;
 public:
-
+	//初期化
 	void Init();
-
+	//更新
 	void Update();
-
+	//描画
 	void Draw();
-
 };
+

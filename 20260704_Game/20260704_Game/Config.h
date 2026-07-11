@@ -16,8 +16,8 @@ namespace Config
 	// PLAYER Settings
 	//===================================
 	//一コマのサイズ
-	constexpr int PLAYER_WIDTH = 210;
-	constexpr int PLAYER_HEIGHT = 220;
+	constexpr int PLAYER_WIDTH = 130;
+	constexpr int PLAYER_HEIGHT = 145;
 	//分割数
 	constexpr int PLAYER_COL = 7;
 	constexpr int PLAYER_ROW = 7;
