@@ -1,44 +1,44 @@
 #include "DxLib.h"
 #include "Game.h"
-#include "Confing.h"
+#include "Config.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	//-----------------------------------------
-	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¢ãƒ¼ãƒ‰ã«è¨­å®š
+	// ƒEƒBƒ“ƒhƒEƒ‚[ƒh‚ÉÝ’è
 	//-----------------------------------------
 	ChangeWindowMode(TRUE);
-	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºã‚’è¨­å®š
-	SetWindowSize(GameConst::SCREEN_WIDTH, GameConst::SCREEN_HEIGHT);
+	// ƒEƒBƒ“ƒhƒEƒTƒCƒY‚ðÝ’è
+	SetWindowSize(Config::WINDOW_WIDTH, Config::WINDOW_HEIGHT);
 	//-----------------------------------------
-	// DXãƒ©ã‚¤ãƒ–ãƒ©ãƒªåˆæœŸåŒ–
+	// DXƒ‰ƒCƒuƒ‰ƒŠ‰Šú‰»
 	//-----------------------------------------
 	if (DxLib_Init() == -1) { return -1; }
-	// æç”»å…ˆã‚’è£ç”»é¢ã«è¨­å®š
+	// •`‰ææ‚ð— ‰æ–Ê‚ÉÝ’è
 	SetDrawScreen(DX_SCREEN_BACK);
-	// æ–‡å­—ãƒ•ã‚©ãƒ³ãƒˆã‚’è¨­å®š
+	// •¶ŽšƒtƒHƒ“ƒg‚ðÝ’è
 	SetFontSize(20);
 
-	// ã‚²ãƒ¼ãƒ ã‚¯ãƒ©ã‚¹ç”Ÿæˆ
+	// ƒQ[ƒ€ƒNƒ‰ƒX¶¬
 	Game game;
-	// ã‚²ãƒ¼ãƒ åˆæœŸåŒ–
+	// ƒQ[ƒ€‰Šú‰»
 	game.Init();
 	//-----------------------------------------
-	// ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—
+	// ƒƒCƒ“ƒ‹[ƒv
 	//-----------------------------------------
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
-		// ã‚²ãƒ¼ãƒ æ›´æ–°
+		// ƒQ[ƒ€XV
 		game.Update();
-		// ç”»é¢ã‚¯ãƒªã‚¢
+		// ‰æ–ÊƒNƒŠƒA
 		ClearDrawScreen();
-		// ã‚²ãƒ¼ãƒ æç”»
+		// ƒQ[ƒ€•`‰æ
 		game.Draw();
-		// è£ç”»é¢ã®å†…å®¹ã‚’è¡¨ç”»é¢ã«åæ˜ 
+		// — ‰æ–Ê‚Ì“à—e‚ð•\‰æ–Ê‚É”½‰f
 		ScreenFlip();
 	}
-	// DXãƒ©ã‚¤ãƒ–ãƒ©ãƒªçµ‚äº†å‡¦ç†
+	// DXƒ‰ƒCƒuƒ‰ƒŠI—¹ˆ—
 	DxLib_End();
-	// æ­£å¸¸çµ‚äº†
+	// ³íI—¹
 	return 0;
 }

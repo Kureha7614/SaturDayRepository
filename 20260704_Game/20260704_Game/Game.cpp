@@ -1,72 +1,74 @@
-#include"Game.h"
-#include"Config.h"
-#include"DxLib.h"
+#include "Game.h"
+#include "Config.h"
+#include "Dxlib.h"
 
 void Game::Init()
 {
-	//======================================
-	//分割画像の読み込み
-	//======================================
-	LoadDivGraph("Image/AnimationPlayer1.png",
+	//===============================
+	// 分割画像の読み込み
+	//===============================
+	LoadDivGraph("img/AnimationPlayer1.png",
 		Config::PLAYER_TOTAL_FRAMES,
 		Config::PLAYER_COL,
 		Config::PLAYER_ROW,
 		Config::PLAYER_WIDTH,
 		Config::PLAYER_HEIGHT,
 		images);
-	//======================================
-	//アニメーションに分割画像を設定
-	//======================================
+	//===============================
+	// アニメーションに分割画像を設定
+	//===============================
 	animations.SetImages(images);
 
-	currentAnim = AnimationType::idel;
+	currentAnim = AnimationType::Idle;
 	PlayerAnimation(currentAnim);
 	oldSpace = false;
 }
 
 void Game::Update()
 {
-	//======================================
-	//フレームマネージャー更新
-	//======================================
+	//===============================
+	// フレームマネージャー更新
+	//===============================
 	frameManager.Update();
 
-	//======================================
-	//スペースキーの押した判定
-	//======================================
-	bool nowSpase = (CheckHitKey(KEY_INPUT_SPACE));
+	//===============================
+	// スペースキーの押下判定
+	//===============================
+	bool nowSpace = (CheckHitKey(KEY_INPUT_SPACE));
 
-	//======================================
-	//スペースキーが押された瞬間にアニメーションを切り替える
-	//======================================
-	if (nowSpase && !oldSpace)
+	//==============================
+	// スペースキーが押された瞬間にアニメーションを切り替える
+	//==============================
+	if (nowSpace && !oldSpace)
 	{
 		switch (currentAnim)
 		{
-		case AnimationType::idel:
-			currentAnim = AnimationType::walk;
+		case AnimationType::Idle:
+			currentAnim = AnimationType::Walk;
 			break;
-		case AnimationType::walk:
-			currentAnim = AnimationType::run;
+		case AnimationType::Walk:
+			currentAnim = AnimationType::Run;
 			break;
-		case AnimationType::run:
-			currentAnim = AnimationType::jump;
+		case AnimationType::Run:
+			currentAnim = AnimationType::Jump;
 			break;
-		case AnimationType::jump:
-			currentAnim = AnimationType::idel;
+		case AnimationType::Jump:
+			currentAnim = AnimationType::Idle;
 			break;
 		default:
 			break;
 		}
-		//======================================
-		//アニメーション切り替え
-		//======================================
+
+		//===============================
+		// アニメーション切替
+		//===============================
 		PlayerAnimation(currentAnim);
 	}
-	//======================================
-	//前回のスペースキーの状態更新
-	//======================================	
-	oldSpace = nowSpase;
+	//===============================
+	// 前回のスペースキーの状態を更新
+	//===============================
+	oldSpace = nowSpace;
+
 }
 
 void Game::Draw()
@@ -92,21 +94,21 @@ void Game::PlayerAnimation(AnimationType type)
 
 	int startFrame = row * Config::PLAYER_COL;
 
-	int speed = Config::IDLE_SPPED;
+	int speed = Config::IDLE_SPEED;
 
 	switch (type)
 	{
-	case AnimationType::idel:
-		speed = Config::IDLE_SPPED;
+	case AnimationType::Idle:
+		speed = Config::IDLE_SPEED;
 		break;
-		case AnimationType::walk:
-		speed = Config::WALK_SPPED;
+	case AnimationType::Walk:
+		speed = Config::WALK_SPEED;
 		break;
-	case AnimationType::run:
-		speed = Config::RUN_SPPED;
+	case AnimationType::Run:
+		speed = Config::RUN_SPEED;
 		break;
-	case AnimationType::jump:
-		speed = Config::JUMP_SPPED;
+	case AnimationType::Jump:
+		speed = Config::JUMP_SPEED;
 		break;
 	}
 

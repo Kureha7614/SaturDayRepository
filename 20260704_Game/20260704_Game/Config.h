@@ -2,35 +2,36 @@
 
 namespace Config
 {
-	//===================================
+	//===============================
 	// Window settings
-	//===================================
-	//„Ç¶„Ç£„É≥„Éâ„Ç¶„Çµ„Ç§„Ç∫
+	//===============================
+	//ÉEÉBÉìÉhÉEÇÃÉTÉCÉY
 	constexpr int WINDOW_WIDTH = 1920;
 	constexpr int WINDOW_HEIGHT = 1080;
-	//Ë°®Á§∫„Åô„Çãx,yÂ∫ßÊ®ô
+	//ï\é¶Ç∑ÇÈX,Yç¿ïW
 	constexpr int PLAYER_DRAW_X = 96;
 	constexpr int PLAYER_DRAW_Y = 96;
 
-	//===================================
-	// PLAYER Settings
-	//===================================
-	//‰∏Ä„Ç≥„Éû„ÅÆ„Çµ„Ç§„Ç∫
-	constexpr int PLAYER_WIDTH = 130;
-	constexpr int PLAYER_HEIGHT = 145;
-	//ÂàÜÂâ≤Êï∞
+	//===============================
+	// Player settings
+	//===============================
+
+	//1ÉRÉ}ÇÃÉTÉCÉY
+	constexpr int PLAYER_WIDTH = 210;
+	constexpr int PLAYER_HEIGHT = 220;
+	//ï™äÑêî
 	constexpr int PLAYER_COL = 7;
-	constexpr int PLAYER_ROW = 7;
-	
-	//Á∑è„Éï„É¨„Éº„É†
+	constexpr int PLAYER_ROW = 4;
+
+	//ëçÉtÉåÅ[ÉÄêî
 	constexpr int PLAYER_TOTAL_FRAMES = PLAYER_COL * PLAYER_ROW;
 
-	//===================================
-	// „Ç¢„Éã„É°„Éº„Ç∑„Éß„É≥„ÅÆÈÄüÂ∫¶
-	//===================================
-	constexpr int IDLE_SPPED = 10;
-	constexpr int WALK_SPPED = 7;
-	constexpr int RUN_SPPED = 8;
-	constexpr int JUMP_SPPED = 6;
+	//===============================
+	// ÉAÉjÉÅÅ[ÉVÉáÉìë¨ìx
+	//===============================
+	constexpr int IDLE_SPEED = 10;
+	constexpr int WALK_SPEED = 7;
+	constexpr int RUN_SPEED = 8;
+	constexpr int JUMP_SPEED = 6;
 
 }
