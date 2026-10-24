@@ -1,63 +1,39 @@
 #pragma once
-
+#include<vector>
 #include<vector>
 #include<iostream>
 using namespace std;
 class Map
 {
 private:
-	//マップチップの番号
-	vector<vector<int>> mapDate;
-	//当たり判定の情報
-	vector<vector<int>> hitDate2;
+	//ファイルを読み込み
 
-	//マップチップ画像
-	int chipImage[64];
-
-	//マップの縦横のマスの数
-	int mapWidth;
-	int mapHeight;
-
-	//マップの大きさ
-	static constexpr int CHIP_SIZE = 64;
-
-	//csvファイルの読み込み
-	bool LoadCSV(const char* fileName, vector<vector<int>>& data);
-
+	/// <summary>
+	/// ロードマップ
+	/// </summary>
+	/// <param name="filePath"マップCSVファイルパス></param>
+	/// <param name="mapDate">マップチップイメージ</param>
+	/// <returns>描画判定</returns>
+	bool LoadMap(const char* filePath,std::vector<std::vector<int>>&mapDate);
+	/// <summary>
+	/// 描画レイヤー
+	/// </summary>
+	/// <param name="mapDate">マップのデータ</param>
+	void DrawLayer(const std::vector<std::vector<int>>& mapDate) const;
+	/// <summary>
+	/// 描画フラグ
+	/// </summary>
+	/// <param name="mapX">X座標</param>
+	/// <param name="mapY">Y座標</param>
+	bool IsValidMapPosition(int mapX, int mapY);
+	//マップの内容
+	std::vector<std::vector<int>> backMap;
+	std::vector<std::vector<int>> baseMap;
+	std::vector<std::vector<int>> nearMap;
+	
+	int mapXNum;
+	int mapYNum;
+	bool isInitialized;
 public:
-	/// <summary>
-	/// Mapコンストラクタ
-	/// </summary>
-	Map();
-
-	bool Init();
-
-	/// <summary>
-	/// Mapの描画
-	/// </summary>
-	void Draw(float cameraX, float cameraY);
-
-	/// <summary>
-	/// マップの当たり判定の描画
-	/// </summary>
-	/// <param name="cameraX">カメラのX座標</param>
-	/// <param name="cameraY">カメラのY座標</param>
-	void DrawHitBox(float cameraX, float cameraY);
-
-	/// <summary>
-	/// 指定したマスが通行できるか調べる
-	/// </summary>
-	/// <param name="tileX">マスのX座標</param>
-	/// <param name="tileY">マスのY座標</param>
-	/// <returns>通行できる場合はtrue、そうでない場合はfalse</returns>
-	bool IsSolid(int tileX, int tileY);
-
-	/// <summary>
-	/// ワールド座標から当たり判定を調べる
-	/// </summary>
-	/// <param name="tileX">ワールド座標のX</param>
-	/// <param name="tileY">ワールド座標のY</param>
-	/// <returns>当たり判定がある場合はtrue、そうでない場合はfalse</returns>
-	bool IsSolidat(int tileX, int tileY);
 };
 
