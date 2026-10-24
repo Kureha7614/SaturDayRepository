@@ -1,7 +1,7 @@
 #pragma once
 #include<vector>
-#include<vector>
 #include<iostream>
+#include"Config.h"
 using namespace std;
 class Map
 {
@@ -26,6 +26,9 @@ private:
 	/// <param name="mapX">X座標</param>
 	/// <param name="mapY">Y座標</param>
 	bool IsValidMapPosition(int mapX, int mapY);
+
+	int chipImages[Config::MAP_CHIP_IMAGE_COUNT];
+
 	//マップの内容
 	std::vector<std::vector<int>> backMap;
 	std::vector<std::vector<int>> baseMap;
@@ -35,5 +38,28 @@ private:
 	int mapYNum;
 	bool isInitialized;
 public:
+	//コンストラクタ＆デストラクタ
+	Map();
+	~Map();
+	//画像とCSVを読み込み
+
+	/// <summary>
+	/// 画像読み込みの初期化
+	/// </summary>
+	/// <returns></returns>
+	bool Init();
+
+	//マップを奥から手前に描画
+
+	/// <summary>
+	/// びょうが
+	/// </summary>
+	void Draw();
+
+	//Dxlib終了前に呼び出して画像などを解放
+
+	void Finalize();
+		
+
 };
 
