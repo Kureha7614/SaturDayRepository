@@ -1,23 +1,23 @@
 #pragma once
 
-//ゲームの設定値まとめるファイル
-//数値やファイルパスを変更するときは、ここを確認します。
+//�Q�[���̐ݒ�l�܂Ƃ߂�t�@�C��
+//���l��t�@�C���p�X��ύX����Ƃ��́A�������m�F���܂��B
 namespace Config
 {
-	//マップチップ画像の設定
+	//�}�b�v�`�b�v�摜�̐ݒ�
 	constexpr int MAP_CHIP_SIZE = 64;
 	constexpr int MAP_CHIP_IMAGE_COLUMNS = 16;
 	constexpr int MAP_CHIP_IMAGE_ROWS = 4;
 	constexpr int MAP_CHIP_IMAGE_COUNT = MAP_CHIP_IMAGE_COLUMNS * MAP_CHIP_IMAGE_ROWS;
 
-	//マップの描画開始位置
+	//�}�b�v�̕`��J�n�ʒu
 	constexpr int MAP_DRAW_ORIGIN_X = 0;
 	constexpr int MAP_DRAW_ORIGIN_Y = 0;
 
-	//CSVの値
+	//CSV�̒l
 	constexpr int MAP_EMPTY = 0;
 
-	//マップファイル
+	//�}�b�v�t�@�C��
 	constexpr char MAP_CHIP_IMAGE_PATH[] = "date/island.png";
 	constexpr char MAP_HIT_CSV_PATH[] = "date/island_hit.csv";
 	constexpr char MAP_BACK_CSV_PATH[] = "date/island_back.csv";

@@ -1,5 +1,5 @@
-#include "Map.h"
 #include"Dxlib.h"
+#include "Map.h"
 
 #include<fstream>
 #include<sstream>
@@ -18,30 +18,144 @@ Map::~Map()
 	Finalize();
 }
 
-//åˆæœŸåŒ–
+//‰Šú‰»
 bool Map::Init()
 {
 	Finalize();
 
-	//ç”»åƒã‚’ãƒãƒƒãƒ—å˜ä½ã«åˆ†å‰²ã—ã¦èª­ã¿è¾¼ã¿
-	if (LoadDivGraph(Config::MAP_CHIP_IMAGE_PATH, Config::MAP_CHIP_IMAGE_COUNT, Config::MAP_CHIP_IMAGE_COLUMNS, Config::MAP_CHIP_IMAGE_ROWS, Config::MAP_CHIP_SIZE,chipImages) == -1)
+	//‰æ‘œ‚ğƒ`ƒbƒv’PˆÊ‚É•ªŠ„‚µ‚Ä“Ç‚İ‚İ
+	if (LoadDivGraph(Config::MAP_CHIP_IMAGE_PATH, Config::MAP_CHIP_IMAGE_COUNT, Config::MAP_CHIP_IMAGE_COLUMNS, Config::MAP_CHIP_IMAGE_ROWS, Config::MAP_CHIP_SIZE, Config::MAP_CHIP_SIZE, chipImages) == -1)
 	{
 		Finalize();
 		return false;
 	}
-	//CSVãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿
+	//CSVƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
 	if (!LoadMap(Config::MAP_BACK_CSV_PATH, backMap) || !LoadMap(Config::MAP_BASE_CSV_PATH, baseMap) || !LoadMap(Config::MAP_NEAR_CSV_PATH, nearMap))
 	{
 		Finalize();
 		return false;
 	}
 
+	mapYNum = static_cast<int>(baseMap.size());
+	mapXNum = static_cast<int>(baseMap[0].size());
 	isInitialized = true;
 
 	return true;
 }
-//ãƒãƒƒãƒ—ã®èª­ã¿è¾¼ã¿
-//æç”»
-//æç”»ãƒ¬ã‚¤ãƒ¤ãƒ¼
-//æç”»ãƒ•ãƒ©ã‚°
-//çµ‚äº†å‡¦ç†
+//ƒ}ƒbƒv‚Ì“Ç‚İ‚İ
+bool Map::LoadMap(const char* filePath, std::vector<std::vector<int>>& mapDate)
+{
+	std::ifstream file(filePath);
+	if (!file.is_open())
+	{
+		return false;
+	}
+
+	mapDate.clear();
+
+	std::string line;
+
+	//ƒtƒ@ƒCƒ‹‚©‚ç•¶š—ñ‚ğˆês‚¸‚Â‚Æ‚Á‚Ä‚­‚é
+	while (std::getline(file,line))
+	{
+		//•¶š—ñ‚ª‚È‚©‚Á‚½‚ç
+		if (line.empty())
+		{
+			continue;
+		}
+		std::vector<int>row;
+		std::stringstream lineStream(line);
+		std::string cell;
+
+		while (std::getline(lineStream, cell, ','))
+		{
+			std::stringstream cellStream(cell);
+			int value = Config::MAP_EMPTY;
+
+			if (!(cellStream >> value))
+			{
+				return false;
+			}
+
+			row.push_back(value);
+		}
+
+		if (row.empty())
+		{
+			return false;
+		}
+		//CSV‚ÌŠes‚Ì‰¡•‚ª“¯‚¶‚Å‚ ‚é‚±‚Æ‚ğŠm”F‚·‚é
+		if (!mapDate.empty() && row.size() != mapDate[0].size())
+		{
+			return false;
+		}
+		mapDate.push_back(row);
+	}
+	return !mapDate.empty();
+}
+//•`‰æ
+void Map::Draw()const
+{
+	if (!isInitialized)
+	{
+		return;
+	}
+	//•`‰æ‡F‰œ‚Ì”wŒi¨’n–Ê¨è‘O¨
+	DrawLayer(backMap);
+	DrawLayer(baseMap);
+	DrawLayer(nearMap);
+}
+//•`‰æƒŒƒCƒ„[
+void Map::DrawLayer(const std::vector<std::vector<int>>& mapData)const
+{
+	for (int y = 0; y < static_cast<int>(mapData.size()); ++y)
+	{
+		for (int x = 0;x < static_cast<int>(mapData[y].size()); ++x)
+		{
+			const int chipNumber = mapData[y][x];
+			if (chipNumber == Config::MAP_EMPTY)
+			{
+				continue;
+			}
+			//CSV‚Ìƒ`ƒbƒv”Ô†‚Í‚Pn‚Ü‚èA‰æ‘œ”z—ñ‚Ì”Ô†‚Í‚On‚Ü‚è
+			const int chipIndex = chipNumber - 1;
+			if (chipIndex < 0 || chipIndex >= Config::MAP_CHIP_IMAGE_COUNT)
+			{
+				continue;
+			}
+			const int drawX = Config::MAP_DRAW_ORIGIN_X + x * Config::MAP_CHIP_SIZE;
+			const int drawY = Config::MAP_DRAW_ORIGIN_Y + y * Config::MAP_CHIP_SIZE;
+			DrawGraph(drawX, drawY, chipImages[chipIndex], TRUE);
+		}
+	}
+		
+}
+//•`‰æƒtƒ‰ƒO
+bool Map::IsValidMapPosition(int mapX, int mapY)const
+{
+	if (mapX < 0 || mapY < 0 || mapX >= mapXNum || mapY >= mapYNum)
+	{
+		return false;
+	}
+	return true;
+}
+//I—¹ˆ—
+void Map::Finalize()
+{
+	for (int i = 0;i < Config::MAP_CHIP_IMAGE_COUNT;++i)
+	{
+		if (chipImages[i] != -1)
+		{
+			DeleteGraph(chipImages[i]);
+			chipImages[i] = -1;
+		}
+	}
+
+	backMap.clear();
+	baseMap.clear();
+	nearMap.clear();
+
+	mapXNum = 0;
+	mapYNum = 0;
+	isInitialized = false;
+}
